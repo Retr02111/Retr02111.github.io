@@ -1,168 +1,111 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Algolux Dashboard</title>
+  <title>Algolux</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    crossorigin=""
-  />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
   <style>
     #map {
-      height: 24rem; /* Tailwind h-96 */
+      height: 24rem;
       border-radius: 0.5rem;
     }
   </style>
 </head>
 <body class="bg-gray-100 font-sans">
-
-  <header class="bg-green-700 text-white p-4 text-center text-2xl font-bold shadow">
-    Algolux Connect Dashboard
-  </header>
-
-  <!-- Dashboard -->
-  <section class="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-    <div class="bg-white p-4 rounded shadow text-center">
-      <h3 class="text-xl font-semibold">CO₂ Absorbed</h3>
-      <p id="co2" class="text-3xl text-green-600">-</p>
+  <!-- Landing Page -->
+  <section class="bg-green-700 text-white p-10 text-center">
+    <h1 class="text-4xl font-bold mb-4">Kush është Algolux?</h1>
+    <p class="max-w-3xl mx-auto text-lg">
+      Algolux është një llambë ekologjike inovative që kombinon ndriçimin urban me pastrimin e ajrit.
+      E pajisur me alga mikroskopike, Algolux përdor fuqinë e fotosintezës për të thithur CO₂ nga atmosfera dhe
+      për të çliruar oksigjen të pastër në mjedis.
+    </p>
+    <p class="max-w-3xl mx-auto mt-4 text-lg">
+      Kjo teknologji e gjelbër jo vetëm që ndihmon në uljen e ndotjes, por gjithashtu prodhon ndriçim duke
+      shfrytëzuar bioenergjinë e gjeneruar nga vetë algat. Ideuar për qytete moderne, Algolux është një hap
+      drejt urbanizmit të qëndrueshëm dhe teknologjisë së gjelbër.
+    </p>
+    <p class="text-xl font-semibold mt-6">🟢 Më shumë oksigjen. Më pak CO₂. Më shumë jetë.</p>
+    <div class="mt-6 flex justify-center gap-4">
+      <img src="https://source.unsplash.com/400x300/?urban,green" class="rounded shadow-md" alt="Urban green" />
+      <img src="https://source.unsplash.com/400x300/?lamp,eco" class="rounded shadow-md" alt="Eco lamp" />
+      <img src="https://source.unsplash.com/400x300/?nature,technology" class="rounded shadow-md" alt="Green tech" />
     </div>
-    <div class="bg-white p-4 rounded shadow text-center">
-      <h3 class="text-xl font-semibold">O₂ Produced</h3>
-      <p id="o2" class="text-3xl text-blue-600">-</p>
-    </div>
-    <div class="bg-white p-4 rounded shadow text-center">
-      <h3 class="text-xl font-semibold">Energy Saved</h3>
-      <p id="energy" class="text-3xl text-yellow-600">-</p>
-    </div>
-    <div class="bg-white p-4 rounded shadow text-center">
-      <h3 class="text-xl font-semibold">City Impact</h3>
-      <p id="cityImpact" class="text-3xl text-purple-600">-</p>
-    </div>
-  </section>
+    <a href="#dashboard" class="inline-block mt-8 px-6 py-2 bg-white text-green-700 font-semibold rounded shadow hover:bg-gray-200">Shiko Dashboard-in</a>
+  </section>  <!-- Dashboard -->  <section id="dashboard">
+    <header class="bg-green-700 text-white p-4 text-center text-2xl font-bold shadow">
+      Algolux Connect Dashboard
+    </header><section class="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+  <div class="bg-white p-4 rounded shadow text-center">
+    <h3 class="text-xl font-semibold">CO₂ Absorbed</h3>
+    <p id="co2" class="text-3xl text-green-600">-</p>
+  </div>
+  <div class="bg-white p-4 rounded shadow text-center">
+    <h3 class="text-xl font-semibold">O₂ Produced</h3>
+    <p id="o2" class="text-3xl text-blue-600">-</p>
+  </div>
+  <div class="bg-white p-4 rounded shadow text-center">
+    <h3 class="text-xl font-semibold">Energy Saved</h3>
+    <p id="energy" class="text-3xl text-yellow-600">-</p>
+  </div>
+  <div class="bg-white p-4 rounded shadow text-center">
+    <h3 class="text-xl font-semibold">City Impact</h3>
+    <p id="cityImpact" class="text-3xl text-purple-600">-</p>
+  </div>
+</section>
 
-  <!-- City Map View -->
-  <section class="p-6">
-    <h2 class="text-2xl font-bold mb-4">City Map View</h2>
-    <div id="map" class="bg-white shadow"></div>
-  </section>
+<section class="p-6">
+  <h2 class="text-2xl font-bold mb-4">City Map View</h2>
+  <div id="map" class="bg-white shadow"></div>
+</section>
 
-  <!-- Maintenance Alerts -->
-  <section class="p-6">
-    <h2 class="text-2xl font-bold mb-4">Maintenance Alerts</h2>
-    <ul class="bg-white rounded shadow p-4 space-y-2" id="alertsList">
-      <!-- Alerts will be populated here -->
-    </ul>
-  </section>
+<section class="p-6">
+  <h2 class="text-2xl font-bold mb-4">Maintenance Alerts</h2>
+  <ul class="bg-white rounded shadow p-4 space-y-2" id="alertsList"></ul>
+</section>
 
-  <!-- Community Involvement -->
-  <section class="p-6">
-    <h2 class="text-2xl font-bold mb-4">Adopt an Algolux</h2>
-    <div class="bg-white rounded shadow p-4">
-      <p>Sponsor one of our lamps to support local sustainability. Track impact, get naming rights, and more!</p>
-      <button class="mt-4 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">Adopt Now</button>
-    </div>
-  </section>
+<section class="p-6">
+  <h2 class="text-2xl font-bold mb-4">Adopt an Algolux</h2>
+  <div class="bg-white rounded shadow p-4">
+    <p>Sponsor one of our lamps to support local sustainability. Track impact, get naming rights, and more!</p>
+    <button class="mt-4 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">Adopt Now</button>
+  </div>
+</section>
 
-  <footer class="bg-gray-800 text-white text-center p-4 mt-6">
-    &copy; 2025 Algolux. All rights reserved.
-  </footer>
+<footer class="bg-gray-800 text-white text-center p-4 mt-6">
+  &copy; 2025 Algolux. All rights reserved.
+</footer>
 
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
-
-  <script>
+  </section>  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>  <script>
     const lamps = [
-      {
-        id: 'Lamp #1',
-        lat: 41.31583,
-        lng: 19.79692,
-        status: 'Active',
-        airQualityImprovement: '+12 AQI',
-        co2: 38,
-        o2: 32,
-        energySaved: 1.5,
-        alerts: [
-          'Algae lifecycle check due in 5 days',
-          'Water quality optimal',
-          'Solar panel performance at 95%'
-        ]
-      },
-      {
-        id: 'Lamp #2',
-        lat: 41.31650,
-        lng: 19.79800,
-        status: 'Active',
-        airQualityImprovement: '+10 AQI',
-        co2: 35,
-        o2: 30,
-        energySaved: 1.4,
-        alerts: [
-          'Algae lifecycle check due in 7 days',
-          'Water quality slightly degraded',
-          'Solar panel performance at 90%'
-        ]
-      },
-      {
-        id: 'Lamp #3',
-        lat: 41.31490,
-        lng: 19.79500,
-        status: 'Needs Maintenance',
-        airQualityImprovement: '+8 AQI',
-        co2: 25,
-        o2: 20,
-        energySaved: 1.2,
-        alerts: [
-          'Algae replacement required',
-          'Water quality degraded',
-          'Solar panel underperforming'
-        ]
-      }
+      { id: 'Lamp #1', lat: 41.31583, lng: 19.79692, status: 'Active', airQualityImprovement: '+12 AQI', co2: 38, o2: 32, energySaved: 1.5, alerts: ['Algae lifecycle check due in 5 days', 'Water quality optimal', 'Solar panel performance at 95%'] },
+      { id: 'Lamp #2', lat: 41.31650, lng: 19.79800, status: 'Active', airQualityImprovement: '+10 AQI', co2: 35, o2: 30, energySaved: 1.4, alerts: ['Algae lifecycle check due in 7 days', 'Water quality slightly degraded', 'Solar panel performance at 90%'] },
+      { id: 'Lamp #3', lat: 41.31490, lng: 19.79500, status: 'Needs Maintenance', airQualityImprovement: '+8 AQI', co2: 25, o2: 20, energySaved: 1.2, alerts: ['Algae replacement required', 'Water quality degraded', 'Solar panel underperforming'] }
     ];
 
-    // Sum up the values for dashboard
-    const totalCO2 = lamps.reduce((acc, lamp) => acc + lamp.co2, 0);
-    const totalO2 = lamps.reduce((acc, lamp) => acc + lamp.o2, 0);
-    const totalEnergy = lamps.reduce((acc, lamp) => acc + lamp.energySaved, 0);
-
-    document.getElementById('co2').textContent = `${totalCO2} g`;
-    document.getElementById('o2').textContent = `${totalO2} g`;
-    document.getElementById('energy').textContent = `${totalEnergy.toFixed(1)} kWh`;
+    document.getElementById('co2').textContent = `${lamps.reduce((a, l) => a + l.co2, 0)} g`;
+    document.getElementById('o2').textContent = `${lamps.reduce((a, l) => a + l.o2, 0)} g`;
+    document.getElementById('energy').textContent = `${lamps.reduce((a, l) => a + l.energySaved, 0).toFixed(1)} kWh`;
     document.getElementById('cityImpact').textContent = `${lamps.length} Lamps`;
 
-    // Initialize map
     const map = L.map('map').setView([41.31583, 19.79692], 16);
-
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
-
-    // Add markers for each lamp
     lamps.forEach(lamp => {
-      const marker = L.marker([lamp.lat, lamp.lng]).addTo(map);
-      marker.bindPopup(
-        `<strong>${lamp.id}</strong><br>Status: ${lamp.status}<br>Air Quality Improvement: ${lamp.airQualityImprovement}`
-      );
+      L.marker([lamp.lat, lamp.lng]).addTo(map)
+        .bindPopup(`<strong>${lamp.id}</strong><br>Status: ${lamp.status}<br>Air Quality Improvement: ${lamp.airQualityImprovement}`);
     });
 
-    // Populate maintenance alerts for all lamps
     const alertsList = document.getElementById('alertsList');
     lamps.forEach(lamp => {
       lamp.alerts.forEach(alert => {
         const li = document.createElement('li');
         li.textContent = `${lamp.id} - ${alert}`;
-        // Color coding based on alert keyword
-        if (alert.toLowerCase().includes('required') || alert.toLowerCase().includes('degraded')) {
-          li.className = 'text-red-600';
-        } else if (alert.toLowerCase().includes('due')) {
-          li.className = 'text-blue-600';
-        } else {
-          li.className = 'text-green-600';
-        }
+        li.className = alert.toLowerCase().includes('required') || alert.toLowerCase().includes('degraded') ? 'text-red-600' : alert.toLowerCase().includes('due') ? 'text-blue-600' : 'text-green-600';
         alertsList.appendChild(li);
       });
     });
-  </script>
-</body>
+  </script></body>
 </html>
