@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Algolux Dashboard</title>
+  <!-- Tailwind CSS CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+  <!-- Leaflet CSS (no integrity to avoid errors) -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    crossorigin=""
+  />
+  <style>
+    #map {
+      height: 24rem; /* Tailwind h-96 */
+      border-radius: 0.5rem;
+    }
+  </style>
+</head>
+<body class="bg-gray-100 font-sans">
+
+  <header class="bg-green-700 text-white p-4 text-center text-2xl font-bold shadow">
+    Algolux Connect Dashboard
+  </header>
+
+<!-- Dashboard -->
+<section class="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+  <div class="bg-white p-4 rounded shadow text-center">
+    <h3 class="text-xl font-semibold">CO₂ Absorbed</h3>
+    <p class="text-3xl text-green-600">38 g</p>
+  </div>
+  <div class="bg-white p-4 rounded shadow text-center">
+    <h3 class="text-xl font-semibold">O₂ Produced</h3>
+    <p class="text-3xl text-blue-600">32 g</p>
+  </div>
+  <div class="bg-white p-4 rounded shadow text-center">
+    <h3 class="text-xl font-semibold">Energy Saved</h3>
+    <p class="text-3xl text-yellow-600">1.5 kWh</p>
+  </div>
+  <div class="bg-white p-4 rounded shadow text-center">
+    <h3 class="text-xl font-semibold">City Impact</h3>
+    <p class="text-3xl text-purple-600">1 Lamp</p>
+  </div>
+</section>
+
+
+  <!-- City Map View -->
+  <section class="p-6">
+    <h2 class="text-2xl font-bold mb-4">City Map View</h2>
+    <div id="map" class="bg-white shadow"></div>
+  </section>
+
+  <!-- Maintenance Alerts -->
+  <section class="p-6">
+    <h2 class="text-2xl font-bold mb-4">Maintenance Alerts</h2>
+    <ul class="bg-white rounded shadow p-4 space-y-2">
+      <li class="text-blue-600">Lamp #1 - Algae lifecycle check due in 5 days</li>
+      <li class="text-green-600">Lamp #1 - Water quality optimal</li>
+      <li class="text-yellow-600">Lamp #1 - Solar panel performance at 95%</li>
+    </ul>
+  </section>
+
+  <!-- Community Involvement -->
+  <section class="p-6">
+    <h2 class="text-2xl font-bold mb-4">Adopt an Algolux</h2>
+    <div class="bg-white rounded shadow p-4">
+      <p>Sponsor this lamp to support local sustainability. Track impact, get naming rights, and more!</p>
+      <button class="mt-4 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">Adopt Now</button>
+    </div>
+  </section>
+
+  <footer class="bg-gray-800 text-white text-center p-4 mt-6">
+    &copy; 2025 Algolux. All rights reserved.
+  </footer>
+
+  <!-- Leaflet JS (no integrity) -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+
+  <script>
+    // Initialize Leaflet map centered on Tirana
+    const map = L.map('map').setView([41.3275, 19.8189], 14);
+
+    // Add OpenStreetMap tiles
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Single lamp data
+// Single lamp data
+    const lamp = {
+        id: 'Lamp #1',
+        lat: 41.31583,
+        lng: 19.79692,
+        status: 'Active',
+        airQualityImprovement: '+12 AQI'
+    };
+
+
+    // Custom icon for lamp (optional, using default marker)
+    const marker = L.marker([lamp.lat, lamp.lng]).addTo(map);
+    marker.bindPopup(
+      `<strong>${lamp.id}</strong><br>Status: ${lamp.status}<br>Air Quality Improvement: ${lamp.airQualityImprovement}`
+    );
+  </script>
+
+</body>
+</html>
