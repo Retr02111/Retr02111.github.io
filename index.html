@@ -92,78 +92,105 @@
   <!-- Scripts -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
   <script>
-    const lamps = [
-      {
-        id: 'Lamp #1',
-        lat: 41.31583,
-        lng: 19.79692,
-        status: 'Active',
-        airQualityImprovement: '+12 AQI',
-        co2: 38,
-        o2: 32,
-        energySaved: 1.5,
-        alerts: [
-          'Algae lifecycle check due in 5 days',
-          'Water quality optimal',
-          'Solar panel performance at 95%'
-        ]
-      },
-      {
-        id: 'Lamp #2',
-        lat: 41.31650,
-        lng: 19.79800,
-        status: 'Active',
-        airQualityImprovement: '+10 AQI',
-        co2: 35,
-        o2: 30,
-        energySaved: 1.4,
-        alerts: [
-          'Algae lifecycle check due in 7 days',
-          'Water quality slightly degraded',
-          'Solar panel performance at 90%'
-        ]
-      },
-      {
-        id: 'Lamp #3',
-        lat: 41.31490,
-        lng: 19.79500,
-        status: 'Needs Maintenance',
-        airQualityImprovement: '+8 AQI',
-        co2: 25,
-        o2: 20,
-        energySaved: 1.2,
-        alerts: [
-          'Algae replacement required',
-          'Water quality degraded',
-          'Solar panel underperforming'
-        ]
-      }
-    ];
+  const lamps = [
+    {
+      id: 'Lamp #1',
+      lat: 41.31583,
+      lng: 19.79692,
+      status: 'Active',
+      airQualityImprovement: '+12 AQI',
+      co2: 38,
+      o2: 32,
+      energySaved: 1.5,
+      alerts: [
+        'Algae lifecycle check due in 5 days',
+        'Water quality optimal',
+        'Solar panel performance at 95%'
+      ]
+    },
+    {
+      id: 'Lamp #2',
+      lat: 41.31650,
+      lng: 19.79800,
+      status: 'Active',
+      airQualityImprovement: '+10 AQI',
+      co2: 35,
+      o2: 30,
+      energySaved: 1.4,
+      alerts: [
+        'Algae lifecycle check due in 7 days',
+        'Water quality slightly degraded',
+        'Solar panel performance at 90%'
+      ]
+    },
+    {
+      id: 'Lamp #3',
+      lat: 41.31490,
+      lng: 19.79500,
+      status: 'Needs Maintenance',
+      airQualityImprovement: '+8 AQI',
+      co2: 25,
+      o2: 20,
+      energySaved: 1.2,
+      alerts: [
+        'Algae replacement required',
+        'Water quality degraded',
+        'Solar panel underperforming'
+      ]
+    }
+  ];
 
-    document.getElementById('co2').textContent = `${lamps.reduce((a, l) => a + l.co2, 0)} g`;
-    document.getElementById('o2').textContent = `${lamps.reduce((a, l) => a + l.o2, 0)} g`;
-    document.getElementById('energy').textContent = `${lamps.reduce((a, l) => a + l.energySaved, 0).toFixed(1)} kWh`;
-    document.getElementById('cityImpact').textContent = `${lamps.length} Lamps`;
+  // Preset start time (e.g., May 1, 2025 00:00:00 UTC)
+  const startTime = new Date('2025-05-25T00:00:00Z').getTime();
 
-    const map = L.map('map').setView([41.31583, 19.79692], 16);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; OpenStreetMap contributors'
-    }).addTo(map);
+  // Base daily rates (per lamp)
+  const ratePerLamp = {
+    co2: 0.2,       // grams/s
+    o2: 0.3,        // grams/s
+    energy: 0.20   // kWh/s
+  };
 
-    lamps.forEach(lamp => {
-      L.marker([lamp.lat, lamp.lng]).addTo(map)
-        .bindPopup(`<strong>${lamp.id}</strong><br>Status: ${lamp.status}<br>Air Quality Improvement: ${lamp.airQualityImprovement}`);
+  function updateDashboardValues() {
+    const now = Date.now();
+    const elapsedSeconds = (now - startTime) / 1000;
+    const totalLamps = lamps.length;
+
+    const co2Total = (elapsedSeconds * ratePerLamp.co2 * totalLamps).toFixed(0);
+    const o2Total = (elapsedSeconds * ratePerLamp.o2 * totalLamps).toFixed(0);
+    const energyTotal = (elapsedSeconds * ratePerLamp.energy * totalLamps).toFixed(2);
+
+    document.getElementById('co2').textContent = `${co2Total} g`;
+    document.getElementById('o2').textContent = `${o2Total} g`;
+    document.getElementById('energy').textContent = `${energyTotal} kWh`;
+    document.getElementById('cityImpact').textContent = `${totalLamps} Lamps`;
+  }
+
+  updateDashboardValues();
+  setInterval(updateDashboardValues, 3000); // Update every 3 seconds
+
+  const map = L.map('map').setView([41.31583, 19.79692], 16);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors'
+  }).addTo(map);
+
+  lamps.forEach(lamp => {
+    L.marker([lamp.lat, lamp.lng]).addTo(map)
+      .bindPopup(`<strong>${lamp.id}</strong><br>Status: ${lamp.status}<br>Air Quality Improvement: ${lamp.airQualityImprovement}`);
+  });
+
+  const alertsList = document.getElementById('alertsList');
+  lamps.forEach(lamp => {
+    lamp.alerts.forEach(alert => {
+      const li = document.createElement('li');
+      li.textContent = `${lamp.id} - ${alert}`;
+      li.className = alert.toLowerCase().includes('required') || alert.toLowerCase().includes('degraded')
+        ? 'text-red-600'
+        : alert.toLowerCase().includes('due')
+          ? 'text-blue-600'
+          : 'text-green-600';
+      alertsList.appendChild(li);
     });
-
-    const alertsList = document.getElementById('alertsList');
-    lamps.forEach(lamp => {
-      lamp.alerts.forEach(alert => {
-        const li = document.createElement('li');
-        li.textContent = `${lamp.id} - ${alert}`;
-        li.className = alert.toLowerCase().includes('required') || alert.toLowerCase().includes('degraded') ? 'text-red-600' : alert.toLowerCase().includes('due') ? 'text-blue-600' : 'text-green-600';
-        alertsList.appendChild(li);
-      });
-    });
-  </script>
+  });
+</script>
 </body>
 </html>
